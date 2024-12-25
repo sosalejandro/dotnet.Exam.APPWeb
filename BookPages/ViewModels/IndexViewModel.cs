@@ -1,25 +1,36 @@
-﻿using Domain.Contracts;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Collections.ObjectModel;
+using Domain.Contracts;
 using Microsoft.AspNetCore.Components;
 using Services.Abstractions;
 
 namespace BookPages.ViewModels;
 
-public class IndexViewModel
+public partial class IndexViewModel : ObservableObject
 {
     private readonly IServiceManager _serviceManager;
     private readonly NavigationManager _navigationManager;
     private readonly BookState _bookState;
+    private readonly EditBookViewModel _editBookViewModel;
 
-    public IndexViewModel(IServiceManager serviceManager, NavigationManager navigationManager, BookState bookState)
+    public IndexViewModel(IServiceManager serviceManager, NavigationManager navigationManager, BookState bookState, EditBookViewModel editBookViewModel)
     {
         _serviceManager = serviceManager;
         _navigationManager = navigationManager;
         _bookState = bookState;
+        _editBookViewModel = editBookViewModel;
+        _editBookViewModel.BookUpdated += OnBookUpdated;
+        Books = new ObservableCollection<BookDto>();
     }
 
-    public List<BookDto> Books { get; private set; } = new();
-    public bool ShowErrorModal { get; private set; } = false;
-    public string ErrorMessage { get; private set; } = string.Empty;
+    [ObservableProperty]
+    private ObservableCollection<BookDto> _books;
+
+    [ObservableProperty]
+    private bool _showErrorModal;
+
+    [ObservableProperty]
+    private string _errorMessage;
 
     public async Task InitializeAsync()
     {
@@ -30,7 +41,8 @@ public class IndexViewModel
     {
         try
         {
-            Books = (await _serviceManager.BookService.GetAllBooksAsync()).ToList();
+            var books = await _serviceManager.BookService.GetAllBooksAsync();
+            Books = new ObservableCollection<BookDto>(books);
         }
         catch (Exception ex)
         {
@@ -43,8 +55,8 @@ public class IndexViewModel
         try
         {
             var newBook = new CreateBookDto("New Book", "Someone", 2023, 1);
-            await _serviceManager.BookService.CreateBookAsync(newBook);
-            await LoadBooksAsync();
+            var createdBook = await _serviceManager.BookService.CreateBookAsync(newBook);
+            Books.Add(createdBook);
         }
         catch (Exception ex)
         {
@@ -69,11 +81,25 @@ public class IndexViewModel
         try
         {
             await _serviceManager.BookService.DeleteBookAsync(id);
-            await LoadBooksAsync();
+            var bookToRemove = Books.FirstOrDefault(b => b.Id == id);
+            if (bookToRemove != null)
+            {
+                Books.Remove(bookToRemove);
+            }
         }
         catch (Exception ex)
         {
             ShowError(ex.Message);
+        }
+    }
+
+    private void OnBookUpdated(object? sender, BookDto updatedBook)
+    {
+        var bookToUpdate = Books.FirstOrDefault(b => b.Id == updatedBook.Id);
+        if (bookToUpdate != null)
+        {
+            var index = Books.IndexOf(bookToUpdate);
+            Books[index] = updatedBook;
         }
     }
 
