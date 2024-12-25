@@ -1,4 +1,5 @@
-﻿using Domain.Contracts;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Domain.Contracts;
 using dotnet.Exam.APPWeb.Domain.Models;
 using Mapster;
 using Microsoft.AspNetCore.Components;
@@ -6,7 +7,7 @@ using Services.Abstractions;
 
 namespace BookPages.ViewModels;
 
-public class EditBookViewModel
+public partial class EditBookViewModel : ObservableObject
 {
     private readonly IServiceManager _serviceManager;
     private readonly NavigationManager _navigationManager;
@@ -19,13 +20,16 @@ public class EditBookViewModel
         _bookState = bookState;
     }
 
-    public Book? Book { get; private set; }
+    [ObservableProperty]
+    private Book? _book;
+
+    public event EventHandler<BookDto>? BookUpdated;
 
     public async Task InitializeAsync(Guid id)
     {
         if (_bookState.CurrentBook != null && _bookState.CurrentBook.Id == id)
         {
-            await Task.Run(() => Book = _bookState.CurrentBook.Adapt<Book>());
+            Book = _bookState.CurrentBook.Adapt<Book>();
         }
         else
         {
@@ -40,7 +44,8 @@ public class EditBookViewModel
             var updateBook = Book.Adapt<UpdateBookDto>();
             try
             {
-                await _serviceManager.BookService.UpdateBookAsync(Book.Id, updateBook);
+                var updatedBook = await _serviceManager.BookService.UpdateBookAsync(Book.Id, updateBook);
+                BookUpdated?.Invoke(this, updatedBook);
                 _navigationManager.NavigateTo("/books");
             }
             catch (Exception)

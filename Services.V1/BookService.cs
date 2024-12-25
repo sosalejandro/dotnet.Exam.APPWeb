@@ -35,6 +35,10 @@ internal sealed partial class BookService : IBookService
 
             await _repositoryManager
                 .UnitOfWork
+                .AddTrackedEntityAsync(book);
+
+            await _repositoryManager
+                .UnitOfWork
                 .SaveChangesAsync(stoppingToken);
 
             return book.Adapt<BookDto>();
