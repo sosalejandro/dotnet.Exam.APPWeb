@@ -1,0 +1,8 @@
+﻿@page "/books/edit/{Id:guid}"
+
+<h3>EditBook</h3>
+<EditBookComponent Id="Id" />
+@code {
+    [Parameter]
+    public Guid Id { get; set; }
+}

@@ -1,0 +1,9 @@
+﻿@page "/books/{Id:guid}"
+<h3>ViewBook</h3>
+
+<ViewBookComponent Id="Id" />
+
+@code {
+    [Parameter]
+    public Guid Id { get; set; }
+}
