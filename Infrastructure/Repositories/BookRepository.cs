@@ -1,7 +1,6 @@
 using Domain.Exceptions;
 using dotnet.Exam.APPWeb.Domain.Models;
 using dotnet.Exam.APPWeb.Domain.Repositories;
-using dotnet.Exam.APPWeb.Infrastructure.Data;
 using Infrastructure;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
