@@ -1,0 +1,30 @@
+﻿@using Domain.Contracts
+@using Mapster
+@using dotnet.Exam.APPWeb.Domain.Models
+@inject BookViewModel ViewModel
+
+<h3>View Book</h3>
+
+@if (ViewModel.Book == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div>
+        <p><strong>Name:</strong> @ViewModel.Book.Name</p>
+        <p><strong>Author:</strong> @ViewModel.Book.Author</p>
+        <p><strong>Published Year:</strong> @ViewModel.Book.PublishedYear</p>
+        <p><strong>Version:</strong> @ViewModel.Book.Version</p>
+        <button @onclick="() => ViewModel.EditBook(Id)">Edit</button>
+    </div>
+}
+
+@code {
+    [Parameter] public Guid Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ViewModel.InitializeAsync(Id);
+    }
+}
