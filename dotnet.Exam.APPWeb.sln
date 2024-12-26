@@ -22,17 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFIles", "SolutionFI
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{620F1228-E54F-4F95-A006-EF5E23230547}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{06BF8F25-D5D1-4871-9BC6-54EA72265EF8}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{E91545A8-4142-4E6E-9CBE-3920E7D039AE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.Abstractions", "Services.Abstractions\Services.Abstractions.csproj", "{D7D87389-6F55-4F1D-AC0A-F65D9A748A1A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.V1", "Services.V1\Services.V1.csproj", "{26009E19-241B-4DB4-B2DF-D51C4EA1D54A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookPages", "BookPages\BookPages.csproj", "{78803E4A-591A-4F06-AD21-36810D063E4D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core (2)", "Core (2)", "{CF1D82B4-D517-4AC7-B283-01056102B307}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
