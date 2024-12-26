@@ -1,0 +1,43 @@
+﻿@using Domain.Contracts
+@using BookPages.Components.Modals
+@inject IndexViewModel ViewModel
+
+<h3>Books</h3>
+<button type="submit" @onclick="ViewModel.AddBookAsync">Add Book</button>
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Author</th>
+            <th>Published Year</th>
+            <th>Version</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var book in ViewModel.Books)
+        {
+            <tr>
+                <td>@book.Name</td>
+                <td>@book.Author</td>
+                <td>@book.PublishedYear</td>
+                <td>@book.Version</td>
+                <td>
+                    <button @onclick="() => ViewModel.ViewBook(book)">View</button>
+                    <button @onclick="() => ViewModel.EditBook(book)">Edit</button>
+                    <button @onclick="() => ViewModel.DeleteBookAsync(book.Id)">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<ErrorModal Show="ViewModel.ShowErrorModal" ErrorMessage="ViewModel.ErrorMessage" OnClose="ViewModel.CloseErrorModal" />
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await ViewModel.InitializeAsync();
+    }
+}
